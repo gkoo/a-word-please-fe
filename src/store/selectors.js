@@ -29,3 +29,4 @@ export const guesserSelector = createSelector(
 export const roomCodeSelector = state => state.roomCode;
 export const showRulesModalSelector = state => state.showRulesModal;
 export const currWordSelector = state => state.currWord;
+export const cluesSelector = state => state.clues;

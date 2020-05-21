@@ -38,6 +38,10 @@ const initialState = {
 };
 const testState = {
   alertMessage: undefined,
+  //clues: {},
+  clues: {
+    'gordon': 'wet',
+  },
   currWord: 'water',
   currUserId: 'gordon',
   debugEnabled: env !== 'production',
@@ -199,7 +203,14 @@ export default function reducer(state = stateToUse, action) {
       return state;
 
     case actions.RECEIVE_GAME_DATA:
-      const { guesserId, playerOrder, roundNum } = action.payload;
+      const {
+        clues,
+        currWord,
+        guesserId,
+        playerOrder,
+        roundNum,
+      } = action.payload;
+
       const gameState = action.payload.state;
       players = action.payload.players;
 
@@ -213,6 +224,8 @@ export default function reducer(state = stateToUse, action) {
 
       return {
         ...state,
+        clues,
+        currWord,
         guesserId,
         gameState,
         players: newPlayers,
