@@ -15,8 +15,12 @@
   text-align: center
 }
 
-.room-code {
+.room-code, .word-to-guess {
   font-family: Courier New;
+}
+
+.word-to-guess {
+  font-size: 96px;
 }
 
 .share-link {
@@ -24,156 +28,6 @@
 }
 
 /* GAME */
-
-.game-card {
-  background-color: #fff;
-  background-size: 200%;
-  border-radius: 10px;
-  color: #000;
-  display: inline-block;
-  text-align: left;
-  width: 200px;
-  /*height: 50px;*/
-  height: 325px;
-}
-
-.game-card.guard {
-  background-image: url(/img/stormtrooper.jpg);
-  background-position: 50% 41%;
-  background-size: 140%;
-}
-
-.game-card.priest {
-  background-image: url(/img/yoda.jpg);
-  background-size: 160%;
-  background-position: 52% 36%;
-}
-
-.game-card.baron {
-  background-image: url(/img/probe.jpg);
-  background-size: 207%;
-  background-position: 40% 44%;
-}
-
-.game-card.handmaid {
-  background-image: url(/img/boo.jpg);
-  background-position: 40% 50%;
-}
-
-.game-card.prince {
-  background-image: url(/img/spiderchan.jpg);
-  background-size: 180%;
-  background-position: 16% -28%;
-}
-
-.game-card.king {
-  background-image: url(/img/bread.jpg);
-  background-size: 180%;
-  background-position: 36% 24%;
-}
-
-.game-card.countess {
-  background-image: url(/img/klappar.jpg);
-  background-size: 150%;
-  background-position: 40% 50%;
-}
-
-.game-card.princess {
-  background-image: url(/img/dude.jpg);
-  background-size: 200%;
-  background-position: 45% 45%;
-}
-
-.game-card.clickable {
-  border: 5px solid #0f0;
-  cursor: pointer;
-}
-
-.game-card.clickable:last-of-type {
-  animation-name: slidein0;
-  animation-duration: 1s;
-  animation-timing-function: ease-out;
-  animation-iteration-count: 1;
-}
-
-@keyframes slidein0 {
-  0%   {left: 30%;}
-  100% {left: 0%;}
-}
-
-/*.game-card.expanded {*/
-  /*height: 325px;*/
-/*}*/
-
-.game-card.clickable:hover {
-  border-color: #e80a20;
-}
-
-.game-card .circle {
-  width: 50px;
-  height: 50px;
-  margin-top: 3px;
-  margin-left: 3px;
-  border-radius: 50%;
-  font-size: 30px;
-  color: #fff;
-  line-height: 50px;
-  text-align: center;
-  background: #000;
-  display: inline-block;
-}
-
-.game-card.discard > .circle {
-  width: 45px;
-  height: 45px;
-  line-height: 43px;
-}
-
-.game-card .title {
-  display: inline-block;
-  width: 130px;
-  height: 50px;
-  margin-left: 5px;
-  font-size: 26px;
-}
-
-.game-card.discard {
-  background-color: #aaa;
-  background-size: 1000%;
-  opacity: 0.5;
-  width: 50px;
-}
-
-.game-card.discard.guard {
-  background-size: 550%;
-  background-position: 42% 30%;
-}
-
-.game-card.discard.priest {
-  background-size: 700%;
-  background-position: 42% 38%;
-}
-
-.game-card.discard.handmaid {
-}
-
-.game-card.discard.prince {
-  background-size: 700%;
-  background-position: 40% -146%;
-}
-
-.game-card.discard.king {
-  background-position: 31% 44%;
-}
-
-.game-card.discard.countess {
-  background-position: 40% 50%;
-}
-
-.game-card.discard.princess {
-  background-size: 1300%;
-  background-position: 44% 47%;
-}
 
 .player-view {
   background-color: #333;
@@ -189,39 +43,7 @@
   margin-top: 50px;
 }
 
-.message-log {
-  border: 1px solid #000;
-  height: 200px;
-  overflow-y: scroll;
-  width: 100%;
-}
-
-.reveal-modal-body {
-  padding-top: 30px;
-  padding-bottom: 30px;
-  text-align: center;
-}
-
-.reveal-card {
-  display: inline-block;
-  padding-left: 10px;
-  padding-right: 10px;
-}
-
-.end-turn-button {
-  top: 0;
-  right: 0;
-  position: absolute;
-  z-index: 10000;
-}
-
 .rules-modal-body {
   max-height: 400px;
   overflow-y: auto;
-}
-
-.card-options-popover.guard,
-.card-options-popover.bishop
-{
-   max-width: 370px;
 }

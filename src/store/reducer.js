@@ -25,7 +25,7 @@ import {
 } from '../constants';
 
 // Change to true to develop UI
-const useTestState = 0;
+const useTestState = 1;
 
 const initialState = {
   alertMessage: undefined,
@@ -34,76 +34,34 @@ const initialState = {
   players: {},
   users: {},
   messages: [],
-  showCardModal: false,
   socket: io(socketIoServerUrl),
 };
 const testState = {
-  ...initialState,
-  activePlayerId: 'gordon',
+  alertMessage: undefined,
+  currWord: 'water',
   currUserId: 'gordon',
-  showRulesModal: false,
+  debugEnabled: env !== 'production',
   gameState: STATE_STARTED,
+  guesserId: 'yuriko',
   name: 'Gordon',
-  cardReveal: [
-    {
-      label: 'Gordon',
-      card: {
-        id: 1000,
-        type: CARD_GUARD,
-      },
-    },
-    {
-      label: 'Steve',
-      card: {
-        id: 1000,
-        type: CARD_PRINCESS,
-      },
-    },
-  ],
-  showCardModal: false,
-  //switchCardData: [
-    //{
-      //name: 'The King of Pain',
-      //card: { id: 2, type: CARD_GUARD },
-    //},
-    //{
-      //name: 'Professor Plum',
-      //card: { id: 3, type: CARD_BARON },
-    //},
-  //],
-  //lastCardPlayed: {
-    //playerId: 'gordon',
-    //card: { id: 2, type: 5 },
-    //discarded: true,
-  //},
   players: {
     gordon: {
       id: 'gordon',
       name: 'Gordon',
-      discardPile: [
-        { id: 101, type: CARD_BARON },
-      ],
       isLeader: true,
-      hand: [{ id: 100, type: CARD_BISHOP }],
     },
     steve: {
       id: 'steve',
       name: 'Steve',
-      hand: [
-        { id: 0, type: CARD_PRINCE },
-      ],
-      discardPile: [{ id: 103, type: CARD_GUARD }],
     },
     yuriko: {
       id: 'yuriko',
       name: 'Yuriko',
-      hand: [
-        { id: 0, type: CARD_PRINCE },
-      ],
-      discardPile: [{ id: 103, type: CARD_GUARD }],
     },
   },
-  playerOrder: ['gordon', 'steve', 'yuriko'],
+  users: {},
+  messages: [],
+  socket: io(socketIoServerUrl),
 };
 
 const stateToUse = useTestState ? testState : initialState;
@@ -241,7 +199,7 @@ export default function reducer(state = stateToUse, action) {
       return state;
 
     case actions.RECEIVE_GAME_DATA:
-      const { activePlayerId, playerOrder, roundNum } = action.payload;
+      const { guesserId, playerOrder, roundNum } = action.payload;
       const gameState = action.payload.state;
       players = action.payload.players;
 
@@ -255,7 +213,7 @@ export default function reducer(state = stateToUse, action) {
 
       return {
         ...state,
-        activePlayerId,
+        guesserId,
         gameState,
         players: newPlayers,
         playerOrder,

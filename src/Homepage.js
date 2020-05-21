@@ -41,9 +41,9 @@ function Homepage() {
       <Row>
         <Col lg={{ offset: 1, span: 10 }} xl={{ offset: 2, span: 8 }}>
           <Jumbotron className='jumbotron'>
-            <h1>Love Communique</h1>
-            <p>Love. Power. Deceit. You'll find it all in Love Communique!</p>
-            <p><em>Get your communique to the Princess!</em></p>
+            <h1>A Word, Please?</h1>
+            <p>Love. Power. Deceit. You'll find it all in A Word, Please?!</p>
+            <p><em>Get your <strike>communique</strike> word to the <strike>Princess</strike> Guesser!</em></p>
           </Jumbotron>
         </Col>
       </Row>

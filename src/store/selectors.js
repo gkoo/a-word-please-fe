@@ -2,10 +2,8 @@ import { createSelector } from 'reselect';
 
 export const alertMessageSelector = state => state.alertMessage;
 export const debugEnabledSelector = state => state.debugEnabled;
-export const cardRevealSelector = state => state.cardReveal;
 export const gameStateSelector = state => state.gameState;
 export const playersSelector = state => state.players;
-export const playerOrderSelector = state => state.playerOrder;
 export const usersSelector = state => state.users;
 export const messagesSelector = state => state.messages;
 export const nameSelector = state => state.name;
@@ -22,17 +20,12 @@ export const currPlayerSelector = createSelector(
   (currUserId, players) => players[currUserId],
 )
 // the id of the player whose turn it is
-export const activePlayerIdSelector = state => state.activePlayerId;
-export const activePlayerSelector = createSelector(
+export const guesserIdSelector = state => state.guesserId;
+export const guesserSelector = createSelector(
   playersSelector,
-  activePlayerIdSelector,
-  (players, activePlayerId) => players[activePlayerId]
+  guesserIdSelector,
+  (players, guesserId) => players[guesserId]
 );
-export const baronRevealDataSelector = state => state.baronRevealData;
-export const lastCardPlayedSelector = state => state.lastCardPlayed;
 export const roomCodeSelector = state => state.roomCode;
-export const showCardModalSelector = state => state.showCardModal;
-export const showDrawNewCardModalSelector = state => state.showDrawNewCardModal;
 export const showRulesModalSelector = state => state.showRulesModal;
-export const switchCardDataSelector = state => state.switchCardData;
-export const winnerIdsSelector = state => state.winnerIds;
+export const currWordSelector = state => state.currWord;

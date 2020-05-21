@@ -2,6 +2,10 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 
+import Container from 'react-bootstrap/Container';
+import Nav from 'react-bootstrap/Nav';
+import NavBar from 'react-bootstrap/NavBar';
+
 import AlertMessageModal from './components/AlertMessageModal';
 import Game from './components/Game';
 import Lobby from './components/Lobby';
@@ -30,6 +34,7 @@ function Room() {
 
   const onDismissAlertMessage = () => dispatch(actions.dismissAlertMessage());
   const onHideRulesModal = () => dispatch(actions.toggleRulesModal({ show: false }));
+  const onShowRulesModal = () => dispatch(actions.toggleRulesModal({ show: true }));
 
   const ROOM_CODE_PREFIX = 'room-';
 
@@ -47,24 +52,23 @@ function Room() {
   useEffect(() => {
     if (!socket) { return; }
 
-    socket.on('baronReveal', baronData => dispatch(actions.baronReveal(baronData)));
-    socket.on('cardReveal', data => dispatch(actions.cardReveal(data)));
     socket.on('debugInfo', data => dispatch(actions.receiveDebugInfo(data)));
-    socket.on('dismissReveal', () => dispatch(actions.dismissReveal()));
     socket.on('endGame', winnerIds => dispatch(actions.endGame(winnerIds)));
     socket.on('initData', data => dispatch(actions.receiveInitData(data)));
     socket.on('gameData', gameData => dispatch(actions.receiveGameData(gameData)));
-    socket.on('lastCardPlayed', playCardData => dispatch(actions.lastCardPlayed(playCardData)));
-    socket.on('message', message => dispatch(actions.newMessage(message)));
     socket.on('newUser', user => dispatch(actions.newUser(user)));
     socket.on('newLeader', userId => dispatch(actions.newLeader(userId)));
-    socket.on('promptDrawNewCard', userId => dispatch(actions.toggleDrawNewCard({ show: true })));
-    socket.on('switchCardData', card => dispatch(actions.switchCardData(card)));
     socket.on('userDisconnect', userId => dispatch(actions.userDisconnect(userId)));
   }, [socket, dispatch]);
 
   return (
-    <>
+    <Container>
+      <NavBar variant='dark'>
+        <Nav className="mr-auto">
+          <NavBar.Brand href="#">A Word, Please?</NavBar.Brand>
+          <Nav.Link href="#" onClick={onShowRulesModal}>How to Play</Nav.Link>
+        </Nav>
+      </NavBar>
       {
         gameState === STATE_PENDING &&
           <Lobby
@@ -86,7 +90,7 @@ function Room() {
       <NameModal show={!name} />
       <AlertMessageModal alertMessage={alertMessage} onClose={onDismissAlertMessage}/>
       <RulesModal show={showRulesModal} onClose={onHideRulesModal} />
-    </>
+    </Container>
   );
 }
 
