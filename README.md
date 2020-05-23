@@ -1,4 +1,4 @@
-# Love Letter
+# A Word Please (FE)
 
 Installation: `npm install` or `yarn install`
 Run: `npm start` or `yarn start`
