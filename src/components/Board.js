@@ -1,86 +1,67 @@
-import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React from 'react';
+import { useSelector } from 'react-redux';
 
-import Button from 'react-bootstrap/Button';
-import Form from 'react-bootstrap/Form'
-import InputGroup from 'react-bootstrap/InputGroup'
-import Row from 'react-bootstrap/Row'
-import Col from 'react-bootstrap/Col'
-
+import {
+  STATE_ENTERING_CLUES,
+  STATE_REVIEWING_CLUES,
+  STATE_ENTERING_GUESS,
+  STATE_TURN_END,
+  STATE_GAME_END,
+} from '../constants';
+import DuplicatesModal from './DuplicatesModal';
+import EnteringCluesView from './EnteringCluesView';
+import EnteringGuessView from './EnteringGuessView';
+import GameEndView from './GameEndView';
+import TurnEndModal from './TurnEndModal';
 import * as selectors from '../store/selectors';
 
 function Board() {
-  const [clue, setClue] = useState('');
-
   const clues = useSelector(selectors.cluesSelector);
+  const currPlayerIsGuesser = useSelector(selectors.currPlayerIsGuesserSelector);
   const currWord = useSelector(selectors.currWordSelector);
-  const guesserId = useSelector(selectors.guesserIdSelector);
-  const currUserId = useSelector(selectors.currUserIdSelector);
+  const gameState = useSelector(selectors.gameStateSelector);
+  const guesser = useSelector(selectors.guesserSelector);
   const players = useSelector(selectors.playersSelector);
-  const socket = useSelector(selectors.socketSelector);
-  const dispatch = useDispatch();
-  const currPlayerIsGuesser = currUserId === guesserId;
 
-  const onSubmit = e => {
-    e.preventDefault();
-    socket.emit('submitClue', clue);
-    setClue('');
-  };
-
-  const onChange = e => {
-    e.preventDefault();
-    setClue(e.target.value.replace(/\s/g, ''));
-  };
-
-  const nonGuessers = Object.values(players).filter(player =>
-    player.id !== guesserId
-  );
+  let clueGivers;
+  if (guesser) {
+    clueGivers = Object.values(players).filter(player =>
+      player.id !== guesser.id
+    );
+  } else {
+    clueGivers = [];
+  }
 
   return (
-    <>
+    <div className='board'>
       {
-        currPlayerIsGuesser &&
-          <h1>Waiting for words...</h1>
+        [STATE_ENTERING_CLUES, STATE_REVIEWING_CLUES].includes(gameState) &&
+          <EnteringCluesView
+            clues={clues}
+            clueGivers={clueGivers}
+            currPlayerIsGuesser={currPlayerIsGuesser}
+            currWord={currWord}
+            guesser={guesser}
+          />
       }
       {
-        !currPlayerIsGuesser &&
-          <>
-            <Row>
-              <Col className='text-center'>
-                <h6>The word is:</h6>
-                <h2 className='word-to-guess'>{currWord}</h2>
-              </Col>
-            </Row>
-            <Row>
-              <Col sm={8} md={{ span: 6, offset: 3 }} className='text-center'>
-                <Form>
-                  <InputGroup>
-                    <Form.Control
-                      onChange={onChange}
-                      placeholder="Enter a one-word clue"
-                      type="text"
-                      value={clue}
-                    />
-                    <Button onClick={onSubmit}>Submit</Button>
-                  </InputGroup>
-                </Form>
-              </Col>
-            </Row>
-            <Row className='my-5'>
-              <Col className='text-center'>
-                {
-                  nonGuessers.map(nonGuesser =>
-                    <div>
-                      {clues[nonGuesser.id] && '✅ '}
-                      {nonGuesser.name}
-                    </div>
-                  )
-                }
-              </Col>
-            </Row>
-          </>
+        gameState === STATE_ENTERING_GUESS &&
+          <EnteringGuessView
+            clues={clues}
+            clueGivers={clueGivers}
+            currPlayerIsGuesser={currPlayerIsGuesser}
+            currWord={currWord}
+            guesser={guesser}
+            players={players}
+          />
       }
-    </>
+      {
+        gameState === STATE_GAME_END &&
+          <GameEndView />
+      }
+      <DuplicatesModal show={gameState === STATE_REVIEWING_CLUES}/>
+      <TurnEndModal show={gameState === STATE_TURN_END}/>
+    </div>
   );
 }
 

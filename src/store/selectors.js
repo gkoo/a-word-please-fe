@@ -29,4 +29,18 @@ export const guesserSelector = createSelector(
 export const roomCodeSelector = state => state.roomCode;
 export const showRulesModalSelector = state => state.showRulesModal;
 export const currWordSelector = state => state.currWord;
+export const currGuessSelector = state => state.currGuess;
 export const cluesSelector = state => state.clues;
+export const currPlayerIsGuesserSelector = createSelector(
+  currUserIdSelector,
+  guesserIdSelector,
+  (currUserId, guesserId) => currUserId === guesserId,
+);
+export const numPointsSelector = state => state.numPoints;
+export const roundNumSelector = state => state.roundNum;
+export const totalNumRoundsSelector = state => state.totalNumRounds;
+export const numRoundsLeftSelector = createSelector(
+  roundNumSelector,
+  totalNumRoundsSelector,
+  (roundNum, totalNumRounds) => totalNumRounds - roundNum - 1,
+);

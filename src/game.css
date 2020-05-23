@@ -21,22 +21,25 @@
 
 .word-to-guess {
   font-size: 96px;
+  text-transform: lowercase;
 }
 
 .share-link {
   margin-top: 50px;
 }
 
-/* GAME */
-
-.player-view {
-  background-color: #333;
-  padding: 20px;
-  border-radius: 5px;
+.correct {
+  color: #0f0;
 }
 
-.player-view.active {
-  background-color: #666;
+.incorrect {
+  color: #f00;
+}
+
+/* GAME */
+
+.board {
+  font-size: 26px;
 }
 
 .lobby-container {
@@ -46,4 +49,12 @@
 .rules-modal-body {
   max-height: 400px;
   overflow-y: auto;
+}
+
+.duplicate {
+  color: #f44;
+}
+
+.clue {
+  font-size: 28px;
 }

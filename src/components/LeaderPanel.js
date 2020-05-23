@@ -10,10 +10,12 @@ import {
   socketSelector,
 } from '../store/selectors';
 import {
-  STATE_GAME_END,
   STATE_PENDING,
-  STATE_ROUND_END,
-  STATE_STARTED,
+  STATE_ENTERING_CLUES,
+  STATE_REVIEWING_CLUES,
+  STATE_ENTERING_GUESS,
+  STATE_TURN_END,
+  STATE_GAME_END,
 } from '../constants';
 import { gameStateSelector } from '../store/selectors';
 
@@ -35,11 +37,6 @@ function LeaderPanel({ numUsers }) {
   const newGame = e => {
     e.preventDefault();
     socket.emit('setPending');
-  };
-
-  const nextRound = e => {
-    e.preventDefault();
-    socket.emit('nextRound');
   };
 
   const endGame = e => {
@@ -70,11 +67,12 @@ function LeaderPanel({ numUsers }) {
       <ButtonGroup>
         {[STATE_PENDING, STATE_GAME_END].includes(gameState) && renderStartGameButton()}
         {
-          gameState === STATE_ROUND_END &&
-            <Button onClick={nextRound}>Next round</Button>
-        }
-        {
-          [STATE_STARTED, STATE_ROUND_END].includes(gameState) &&
+          [
+            STATE_ENTERING_CLUES,
+            STATE_REVIEWING_CLUES,
+            STATE_ENTERING_GUESS,
+            STATE_TURN_END,
+          ].includes(gameState) &&
             <Button onClick={endGame}>End game</Button>
         }
         {

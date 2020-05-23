@@ -5,22 +5,12 @@ import * as actions from './actions';
 
 import {
   socketIoServerUrl,
-  CARD_GUARD,
-  //CARD_PRIEST,
-  CARD_BARON,
-  //CARD_HANDMAID,
-  CARD_PRINCE,
-  //CARD_KING,
-  //CARD_COUNTESS,
-  CARD_PRINCESS,
-  //CARD_JESTER,
-  CARD_CARDINAL,
-  CARD_BARONESS,
-  //CARD_SYCOPHANT,
-  //CARD_DOWAGER_QUEEN,
-  CARD_BISHOP,
   STATE_PENDING,
   STATE_STARTED,
+  STATE_ENTERING_CLUES,
+  STATE_REVIEWING_CLUES,
+  STATE_ENTERING_GUESS,
+  STATE_TURN_END,
   STATE_GAME_END,
 } from '../constants';
 
@@ -40,14 +30,23 @@ const testState = {
   alertMessage: undefined,
   //clues: {},
   clues: {
-    'gordon': 'wet',
+    'steve': {
+      clue: 'fire',
+      isDuplicate: true,
+    },
+    'gordon': {
+      clue: 'wet',
+      isDuplicate: true,
+    },
   },
   currWord: 'water',
-  currUserId: 'gordon',
+  currUserId: 'yuriko',
+  currGuess: 'hydrant',
   debugEnabled: env !== 'production',
-  gameState: STATE_STARTED,
+  gameState: STATE_ENTERING_GUESS,
   guesserId: 'yuriko',
   name: 'Gordon',
+  numPoints: 1,
   players: {
     gordon: {
       id: 'gordon',
@@ -63,9 +62,10 @@ const testState = {
       name: 'Yuriko',
     },
   },
-  users: {},
-  messages: [],
+  roundNum: 0,
   socket: io(socketIoServerUrl),
+  totalNumRounds: 13,
+  users: {},
 };
 
 const stateToUse = useTestState ? testState : initialState;
@@ -205,10 +205,13 @@ export default function reducer(state = stateToUse, action) {
     case actions.RECEIVE_GAME_DATA:
       const {
         clues,
+        currGuess,
         currWord,
         guesserId,
+        numPoints,
         playerOrder,
         roundNum,
+        totalNumRounds,
       } = action.payload;
 
       const gameState = action.payload.state;
@@ -225,12 +228,15 @@ export default function reducer(state = stateToUse, action) {
       return {
         ...state,
         clues,
+        currGuess,
         currWord,
         guesserId,
         gameState,
+        numPoints,
         players: newPlayers,
         playerOrder,
         roundNum,
+        totalNumRounds,
       };
 
     case actions.RECEIVE_INIT_DATA:
