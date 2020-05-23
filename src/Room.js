@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
-import NavBar from 'react-bootstrap/NavBar';
+import NavBar from 'react-bootstrap/Navbar';
 
 import AlertMessageModal from './components/AlertMessageModal';
 import Game from './components/Game';
