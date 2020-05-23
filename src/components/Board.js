@@ -34,7 +34,7 @@ function Board() {
   let clueGivers;
   if (guesser) {
     clueGivers = Object.values(players).filter(player =>
-      player.id !== guesser.id
+      player.id !== guesser.id && player.connected
     );
   } else {
     clueGivers = [];

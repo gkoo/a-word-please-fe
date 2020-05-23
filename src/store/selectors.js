@@ -42,5 +42,5 @@ export const totalNumRoundsSelector = state => state.totalNumRounds;
 export const numRoundsLeftSelector = createSelector(
   roundNumSelector,
   totalNumRoundsSelector,
-  (roundNum, totalNumRounds) => totalNumRounds - roundNum - 1,
+  (roundNum, totalNumRounds) => totalNumRounds - roundNum,
 );

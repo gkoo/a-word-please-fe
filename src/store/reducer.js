@@ -14,7 +14,7 @@ import {
 } from '../constants';
 
 // Change to true to develop UI
-const useTestState = 1;
+const useTestState = 0;
 
 const initialState = {
   alertMessage: undefined,
@@ -45,8 +45,9 @@ const testState = {
   //gameState: STATE_ENTERING_CLUES,
   //gameState: STATE_REVIEWING_CLUES,
   //gameState: STATE_ENTERING_GUESS,
-  gameState: STATE_TURN_END,
-  guesserId: 'gordon',
+  //gameState: STATE_TURN_END,
+  gameState: STATE_GAME_END,
+  guesserId: 'willy',
   //guesserId: 'willy',
   name: 'Gordon',
   numPoints: 7,
@@ -116,15 +117,8 @@ const colors = [
   'green',
   'teal',
   'cyan',
-  'gray',
-  'gray-dark',
-  'primary',
-  'secondary',
-  'success',
-  'info',
   'warning',
   'danger',
-  'dark',
 ];
 
 const getColorForPlayerName = name => {

@@ -58,7 +58,7 @@ function EnteringCluesView({
     setClue('');
   };
 
-  const currPlayerClue = clues[currPlayer.id];
+  const currPlayerClue = currPlayer && clues[currPlayer.id];
 
   if (currPlayerIsGuesser) {
     return (

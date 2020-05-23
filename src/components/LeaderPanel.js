@@ -25,7 +25,7 @@ function LeaderPanel({ numUsers }) {
   const gameState = useSelector(gameStateSelector);
   const socket = useSelector(socketSelector);
 
-  if (!currUser || !currUser.isLeader) {
+  if (!currUser) {
     return <div/>;
   }
 
@@ -36,12 +36,20 @@ function LeaderPanel({ numUsers }) {
 
   const newGame = e => {
     e.preventDefault();
-    socket.emit('setPending');
+    socket.emit('newGame');
+  };
+
+  const nextTurn = e => {
+    e.preventDefault();
+    socket.emit('nextTurn');
   };
 
   const endGame = e => {
     e.preventDefault();
-    socket.emit('endGame');
+
+    if (window.confirm('This will end the game. Are you sure?')) {
+      socket.emit('endGame');
+    }
   };
 
   const debug = e => {
@@ -66,6 +74,10 @@ function LeaderPanel({ numUsers }) {
     <div>
       <ButtonGroup>
         {[STATE_PENDING, STATE_GAME_END].includes(gameState) && renderStartGameButton()}
+        {
+          gameState === STATE_TURN_END &&
+            <Button onClick={nextTurn}>Next Turn</Button>
+        }
         {
           [
             STATE_ENTERING_CLUES,

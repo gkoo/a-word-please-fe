@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 
 import Overlay from 'react-bootstrap/Overlay'
@@ -10,7 +10,7 @@ import { playersSelector } from '../store/selectors';
 const renderClue = (clue, isDuplicate, isRedacted) => {
   if (!isRedacted) {
     return (
-      <div>
+      <>
         {clue}
         {
           isDuplicate &&
@@ -18,7 +18,7 @@ const renderClue = (clue, isDuplicate, isRedacted) => {
               { ' ❌' }
             </span>
         }
-      </div>
+      </>
     );
   }
 
@@ -31,9 +31,14 @@ const renderClue = (clue, isDuplicate, isRedacted) => {
 
 function ClueCard({ clueData, playerId, isRedacted }) {
   const target = useRef(null);
+  const [showOverlay, setShowOverlay] = useState(false);
   const players = useSelector(playersSelector);
 
   const player = players[playerId];
+
+  useEffect(() => {
+    setShowOverlay(true);
+  }, [showOverlay]);
 
   return (
     <>
@@ -41,7 +46,7 @@ function ClueCard({ clueData, playerId, isRedacted }) {
         {player.name}
       </div>
       <br />
-      <Overlay target={target.current} show={true} placement="right">
+      <Overlay target={target.current} show={showOverlay} placement="right">
         {
           (props) =>
             <Tooltip className={cx('clue-label', { duplicate: clueData.isDuplicate })} {...props}>

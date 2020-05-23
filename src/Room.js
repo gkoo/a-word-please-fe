@@ -25,7 +25,6 @@ function Room() {
   const messages = useSelector(selectors.messagesSelector);
   const roomCode = useSelector(selectors.roomCodeSelector);
   const name = useSelector(selectors.nameSelector);
-  const players = useSelector(selectors.playersSelector);
   const showRulesModal = useSelector(selectors.showRulesModalSelector);
   const socket = useSelector(selectors.socketSelector);
   const users = useSelector(selectors.usersSelector);
@@ -83,7 +82,6 @@ function Room() {
           <Game
             socket={socket}
             messages={messages}
-            players={players}
           />
       }
       <NameModal show={!name} />
