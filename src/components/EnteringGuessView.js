@@ -6,7 +6,6 @@ import Col from 'react-bootstrap/Col'
 import Form from 'react-bootstrap/Form'
 import InputGroup from 'react-bootstrap/InputGroup'
 import Button from 'react-bootstrap/Button';
-import cx from 'classnames';
 
 import CluesView from './CluesView';
 import * as selectors from '../store/selectors';

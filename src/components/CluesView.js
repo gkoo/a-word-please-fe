@@ -1,13 +1,8 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import { useSelector } from 'react-redux';
 
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-
 import ClueCard from './ClueCard';
-import { cluesSelector, playersSelector } from '../store/selectors';
-
-import cx from 'classnames';
+import { cluesSelector } from '../store/selectors';
 
 function CluesView({ largeView, redactDuplicates }) {
   const clues = useSelector(cluesSelector);

@@ -14,7 +14,7 @@ const renderClue = (clue, isDuplicate, isRedacted) => {
         {clue}
         {
           isDuplicate &&
-            <span>
+            <span role='img' aria-label='duplicate-guess'>
               { ' ❌' }
             </span>
         }
@@ -24,7 +24,7 @@ const renderClue = (clue, isDuplicate, isRedacted) => {
 
   return (
     <div>
-      🤐
+      <span role='img' aria-label='duplicate-guess'>🤐</span>
     </div>
   );
 };
