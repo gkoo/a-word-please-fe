@@ -1,32 +1,20 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 
-import cx from 'classnames';
 import Modal from 'react-bootstrap/Modal';
 
-import * as selectors from '../store/selectors';
+import CluesView from './CluesView';
+import { currPlayerIsGuesserSelector } from '../store/selectors';
 
 function DuplicatesModal({ show }) {
-  const clues = useSelector(selectors.cluesSelector);
-  const currPlayerIsGuesser = useSelector(selectors.currPlayerIsGuesserSelector);
-  const players = useSelector(selectors.playersSelector);
+  const currPlayerIsGuesser = useSelector(currPlayerIsGuesserSelector);
 
   return (
-    <Modal show={show && !currPlayerIsGuesser} className='mt-5'>
-      <Modal.Body>
-        <h2>Your clues</h2>
-        <div className='text-center'>
-          {
-            Object.keys(clues).map(playerId => {
-              const clueData = clues[playerId];
-              const classes = cx({ duplicate: clueData.isDuplicate });
-              return (
-                <div className='clue'>
-                  {players[playerId].name}: <span className={classes}>{clueData.clue}</span>
-                </div>
-              );
-            })
-          }
+    <Modal show={show && !currPlayerIsGuesser} className='mt-5' animation={false}>
+      <Modal.Body className='text-center'>
+        <h3>Your clues</h3>
+        <div>
+          <CluesView redactDuplicates={false} />
         </div>
       </Modal.Body>
     </Modal>

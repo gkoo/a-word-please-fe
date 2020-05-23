@@ -6,7 +6,6 @@ import * as actions from './actions';
 import {
   socketIoServerUrl,
   STATE_PENDING,
-  STATE_STARTED,
   STATE_ENTERING_CLUES,
   STATE_REVIEWING_CLUES,
   STATE_ENTERING_GUESS,

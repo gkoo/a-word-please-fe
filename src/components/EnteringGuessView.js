@@ -8,7 +8,10 @@ import InputGroup from 'react-bootstrap/InputGroup'
 import Button from 'react-bootstrap/Button';
 import cx from 'classnames';
 
+import CluesView from './CluesView';
 import * as selectors from '../store/selectors';
+
+const MAX_GUESS_LENGTH = 20;
 
 function EnteringCluesView({
   clues,
@@ -23,7 +26,7 @@ function EnteringCluesView({
 
   const onEnterGuess = e => {
     e.preventDefault();
-    setGuess(e.target.value.replace(/[^\w]/g, ''));
+    setGuess(e.target.value.substring(0, MAX_GUESS_LENGTH).replace(/[^\w]/g, ''));
   };
 
   const onSubmit = e => {
@@ -37,21 +40,8 @@ function EnteringCluesView({
     <>
       <Row>
         <Col className='text-center mb-5'>
-          <h4>Here are some clues:</h4>
-          {
-            Object.keys(clues).map(clueGiverId => {
-              const clueData = clues[clueGiverId];
-              const clueGiver = players[clueGiverId];
-              return (
-                <div>
-                  <span className={`inline-player-label ${clueGiver.color}`}>{clueGiver.name}</span>:{' '}
-                  <span className={cx({ duplicate: clueData.isDuplicate })}>
-                    {clueData.isDuplicate ? '[redacted]' : clueData.clue}
-                  </span>
-                </div>
-              );
-            })
-          }
+          <h1>Here are some clues:</h1>
+          <CluesView redactDuplicates={true} />
         </Col>
       </Row>
       {
@@ -77,7 +67,7 @@ function EnteringCluesView({
         !currPlayerIsGuesser &&
           <Row className='text-center'>
             <Col>
-              <h3>{guesser.name} is entering a guess!</h3>
+              <h1>{guesser && guesser.name} is entering a guess!</h1>
             </Col>
           </Row>
       }

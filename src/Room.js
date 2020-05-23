@@ -84,7 +84,6 @@ function Room() {
             socket={socket}
             messages={messages}
             players={players}
-            users={users}
           />
       }
       <NameModal show={!name} />

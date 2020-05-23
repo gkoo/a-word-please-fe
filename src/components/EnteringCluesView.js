@@ -9,9 +9,34 @@ import Button from 'react-bootstrap/Button';
 
 import * as selectors from '../store/selectors';
 
+const renderCurrWord = currWord => {
+  return (
+    <Row className='mb-5'>
+      <Col className='text-center'>
+        <h6>The word is:</h6>
+        <h2 className='word-to-guess'>{currWord}</h2>
+      </Col>
+    </Row>
+  );
+};
+
+const renderYourClue = clue => {
+  return (
+    <Row className='mt-4'>
+      <Col className='text-center'>
+        <h6>Your clue is:</h6>
+        <h2 className='word-to-guess'>{clue}</h2>
+      </Col>
+    </Row>
+  );
+};
+
+const MAX_CLUE_LENGTH = 20;
+
 function EnteringCluesView({
   clues,
   clueGivers,
+  currPlayer,
   currPlayerIsGuesser,
   currWord,
   guesser,
@@ -21,60 +46,66 @@ function EnteringCluesView({
 
   const onEnterClue = e => {
     e.preventDefault();
-    setClue(e.target.value.replace(/[^\w]/g, ''));
+    setClue(e.target.value.substring(0, MAX_CLUE_LENGTH).replace(/[^\w]/g, ''));
   };
 
   const onSubmit = e => {
     e.preventDefault();
+    if (clue.toLowerCase() === currWord.toLowerCase()) {
+      return;
+    }
     socket.emit('submitClue', clue);
     setClue('');
   };
 
+  const currPlayerClue = clues[currPlayer.id];
+
+  if (currPlayerIsGuesser) {
+    return (
+      <Row className='text-center'>
+        <Col>
+          <h1>Waiting for clues...</h1>
+        </Col>
+      </Row>
+    );
+  }
+
+  if (currPlayerClue) {
+    return (
+      <>
+        {renderCurrWord(currWord)}
+        {renderYourClue(currPlayerClue.clue)}
+      </>
+    );
+  }
+
   return (
     <>
-      {
-        currPlayerIsGuesser &&
-          <Row className='text-center'>
-            <Col>
-              <h1>Waiting for clues...</h1>
-            </Col>
-          </Row>
-      }
-      {
-        !currPlayerIsGuesser &&
-          <>
-            <Row>
-              <Col className='text-center'>
-                <h6>The word is:</h6>
-                <h2 className='word-to-guess'>{currWord}</h2>
-              </Col>
-            </Row>
-            <Row>
-              <Col sm={8} md={{ span: 6, offset: 3 }} className='text-center'>
-                <Form onSubmit={onSubmit}>
-                  <InputGroup>
-                    <Form.Control
-                      onChange={onEnterClue}
-                      placeholder="Enter a one-word clue"
-                      type="text"
-                      value={clue}
-                    />
-                    <Button type='submit'>Submit</Button>
-                  </InputGroup>
-                </Form>
-              </Col>
-            </Row>
-            <Row>
-              <Col sm={{ span: 10, offset: 1 }}>
-                <p className='help-text mt-3'>
-                  Think of a clue (one word only) that will help {guesser.name} guess the word!
-                  Make sure it's unique; if someone else chooses the same clue, it will not be shown
-                  to {guesser.name}.
-                </p>
-              </Col>
-            </Row>
-          </>
-      }
+      {renderCurrWord(currWord)}
+      <Row>
+        <Col sm={8} md={{ span: 6, offset: 3 }} className='text-center'>
+          <Form onSubmit={onSubmit}>
+            <InputGroup>
+              <Form.Control
+                onChange={onEnterClue}
+                placeholder="Enter a one-word clue"
+                type="text"
+                value={clue}
+              />
+              <Button type='submit'>Submit</Button>
+            </InputGroup>
+          </Form>
+        </Col>
+      </Row>
+      <Row>
+        <Col sm={{ span: 10, offset: 1 }}>
+          <p className='help-text mt-3'>
+            Think of a clue (one word only) that will help {guesser.name} guess the word!
+            Make sure it's unique; if someone else chooses the same clue, it will not be shown
+            to {guesser.name}.
+          </p>
+        </Col>
+      </Row>
     </>
   );
 }

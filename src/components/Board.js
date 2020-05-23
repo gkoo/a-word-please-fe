@@ -15,11 +15,13 @@ import DuplicatesModal from './DuplicatesModal';
 import EnteringCluesView from './EnteringCluesView';
 import EnteringGuessView from './EnteringGuessView';
 import GameEndView from './GameEndView';
-import TurnEndModal from './TurnEndModal';
+import LeaderPanel from './LeaderPanel';
+import TurnEndView from './TurnEndView';
 import * as selectors from '../store/selectors';
 
 function Board() {
   const clues = useSelector(selectors.cluesSelector);
+  const currPlayer = useSelector(selectors.currPlayerSelector);
   const currPlayerIsGuesser = useSelector(selectors.currPlayerIsGuesserSelector);
   const currWord = useSelector(selectors.currWordSelector);
   const gameState = useSelector(selectors.gameStateSelector);
@@ -27,6 +29,7 @@ function Board() {
   const numPoints = useSelector(selectors.numPointsSelector);
   const numRoundsLeft = useSelector(selectors.numRoundsLeftSelector);
   const players = useSelector(selectors.playersSelector);
+  const users = useSelector(selectors.usersSelector);
 
   let clueGivers;
   if (guesser) {
@@ -46,6 +49,7 @@ function Board() {
               <EnteringCluesView
                 clues={clues}
                 clueGivers={clueGivers}
+                currPlayer={currPlayer}
                 currPlayerIsGuesser={currPlayerIsGuesser}
                 currWord={currWord}
                 guesser={guesser}
@@ -63,12 +67,28 @@ function Board() {
               />
           }
           {
+            gameState === STATE_ENTERING_GUESS &&
+              <EnteringGuessView
+                clues={clues}
+                clueGivers={clueGivers}
+                currPlayerIsGuesser={currPlayerIsGuesser}
+                currWord={currWord}
+                guesser={guesser}
+                players={players}
+              />
+          }
+          {
+            gameState === STATE_TURN_END &&
+              <TurnEndView />
+          }
+          {
             gameState === STATE_GAME_END &&
               <GameEndView />
           }
         </Col>
         <Col sm={4} className='main-panel text-center py-5'>
-          <Row className='pb-4'>
+          <LeaderPanel numUsers={Object.keys(users).length}/>
+          <Row className='py-4'>
             <Col sm={6}>
               <u>Points</u>
               <br />
@@ -84,22 +104,24 @@ function Board() {
             guesser &&
               <>
                 <h3><u>Guesser</u></h3>
-                <div className={`player-label ${players[guesser.id].color}`}>{guesser.name}</div>
+                <div className={`inline-player-label player-label ${players[guesser.id].color}`}>{guesser.name}</div>
               </>
           }
           <h3 className='mt-5'><u>Clue Givers</u></h3>
           {
             clueGivers.map(clueGiver =>
+              <>
+              {clues[clueGiver.id] && '✅ '}
               <div className={`player-label ${players[clueGiver.id].color}`}>
-                {clues[clueGiver.id] && '✅ '}
                 {clueGiver.name}
               </div>
+              <br />
+              </>
             )
           }
         </Col>
       </Row>
       <DuplicatesModal show={gameState === STATE_REVIEWING_CLUES}/>
-      <TurnEndModal show={gameState === STATE_TURN_END}/>
     </div>
   );
 }

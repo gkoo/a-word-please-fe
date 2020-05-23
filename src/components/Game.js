@@ -4,14 +4,12 @@ import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 
 import Board from './Board';
-import LeaderPanel from './LeaderPanel';
 
-function Game({ socket, messages, users }) {
+function Game({ socket, messages }) {
   return (
     <>
       <Row>
         <Col>
-          <LeaderPanel numUsers={Object.keys(users).length}/>
           <Board />
         </Col>
       </Row>
