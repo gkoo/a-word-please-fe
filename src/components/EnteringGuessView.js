@@ -6,6 +6,7 @@ import Col from 'react-bootstrap/Col'
 import Form from 'react-bootstrap/Form'
 import InputGroup from 'react-bootstrap/InputGroup'
 import Button from 'react-bootstrap/Button';
+import cx from 'classnames';
 
 import * as selectors from '../store/selectors';
 
@@ -43,7 +44,10 @@ function EnteringCluesView({
               const clueGiver = players[clueGiverId];
               return (
                 <div>
-                  {clueGiver.name}: {clueData.isDuplicate ? '[redacted]' : clueData.clue}
+                  {clueGiver.name}:{' '}
+                  <span className={cx({ duplicate: clueData.isDuplicate })}>
+                    {clueData.isDuplicate ? '[redacted]' : clueData.clue}
+                  </span>
                 </div>
               );
             })
