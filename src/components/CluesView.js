@@ -18,7 +18,11 @@ function CluesView({ largeView, redactDuplicates }) {
         Object.keys(clues).map(playerId => {
           const clueData = clues[playerId];
           return (
-            <ClueCard clueData={clueData} playerId={playerId} />
+            <ClueCard
+              clueData={clueData}
+              playerId={playerId}
+              isRedacted={redactDuplicates && clueData.isDuplicate}
+            />
           );
         })
       }

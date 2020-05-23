@@ -7,7 +7,29 @@ import cx from 'classnames';
 
 import { playersSelector } from '../store/selectors';
 
-function ClueCard({ clueData, playerId }) {
+const renderClue = (clue, isDuplicate, isRedacted) => {
+  if (!isRedacted) {
+    return (
+      <div>
+        {clue}
+        {
+          isDuplicate &&
+            <span>
+              { ' ❌' }
+            </span>
+        }
+      </div>
+    );
+  }
+
+  return (
+    <div>
+      🤐
+    </div>
+  );
+};
+
+function ClueCard({ clueData, playerId, isRedacted }) {
   const target = useRef(null);
   const players = useSelector(playersSelector);
 
@@ -23,13 +45,7 @@ function ClueCard({ clueData, playerId }) {
         {
           (props) =>
             <Tooltip className={cx('clue-label', { duplicate: clueData.isDuplicate })} {...props}>
-              {clueData.clue}
-              {
-                clueData.isDuplicate &&
-                  <span>
-                    { ' ❌' }
-                  </span>
-              }
+              {renderClue(clueData.clue, clueData.isDuplicate, isRedacted)}
             </Tooltip>
         }
       </Overlay>

@@ -67,17 +67,6 @@ function Board() {
               />
           }
           {
-            gameState === STATE_ENTERING_GUESS &&
-              <EnteringGuessView
-                clues={clues}
-                clueGivers={clueGivers}
-                currPlayerIsGuesser={currPlayerIsGuesser}
-                currWord={currWord}
-                guesser={guesser}
-                players={players}
-              />
-          }
-          {
             gameState === STATE_TURN_END &&
               <TurnEndView />
           }

@@ -36,7 +36,7 @@ function TurnEndView() {
           </h1>
         </Col>
       </Row>
-      <CluesView redactDuplicates={true} largeView={true} />
+      <CluesView largeView={true} />
     </div>
   );
 }

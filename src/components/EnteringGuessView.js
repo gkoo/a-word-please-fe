@@ -49,7 +49,7 @@ function EnteringCluesView({
           <Row>
             <Col sm={8} md={{ span: 6, offset: 3 }} className='text-center'>
               <Form onSubmit={onSubmit}>
-                <h1>Enter a guess</h1>
+                <h1 className='mb-4'>Enter a guess</h1>
                 <InputGroup>
                   <Form.Control
                     onChange={onEnterGuess}

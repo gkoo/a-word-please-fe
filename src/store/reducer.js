@@ -14,7 +14,7 @@ import {
 } from '../constants';
 
 // Change to true to develop UI
-const useTestState = 0;
+const useTestState = 1;
 
 const initialState = {
   alertMessage: undefined,
@@ -30,20 +30,24 @@ const testState = {
   //clues: {},
   clues: {
     'steve': {
-      clue: 'fire',
+      clue: 'wet',
       isDuplicate: true,
     },
     'gordon': {
-      clue: 'wet',
-      isDuplicate: true,
+      clue: 'fire',
+      isDuplicate: false,
     },
   },
   currWord: 'water',
   currUserId: 'gordon',
   currGuess: 'hydrant',
   debugEnabled: env !== 'production',
-  gameState: STATE_ENTERING_GUESS,
-  guesserId: 'willy',
+  //gameState: STATE_ENTERING_CLUES,
+  //gameState: STATE_REVIEWING_CLUES,
+  //gameState: STATE_ENTERING_GUESS,
+  gameState: STATE_TURN_END,
+  guesserId: 'gordon',
+  //guesserId: 'willy',
   name: 'Gordon',
   numPoints: 7,
   players: {

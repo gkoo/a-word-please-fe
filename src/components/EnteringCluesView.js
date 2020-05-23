@@ -72,10 +72,11 @@ function EnteringCluesView({
 
   if (currPlayerClue) {
     return (
-      <>
+      <div className='text-center'>
         {renderCurrWord(currWord)}
         {renderYourClue(currPlayerClue.clue)}
-      </>
+        <h3 className='mt-3'>Waiting for others to enter their clues...</h3>
+      </div>
     );
   }
 
