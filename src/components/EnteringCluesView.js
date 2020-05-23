@@ -62,30 +62,19 @@ function EnteringCluesView({
                     <Button type='submit'>Submit</Button>
                   </InputGroup>
                 </Form>
-                <h5 className='mt-3'>
+              </Col>
+            </Row>
+            <Row>
+              <Col sm={{ span: 10, offset: 1 }}>
+                <p className='help-text mt-3'>
                   Think of a clue (one word only) that will help {guesser.name} guess the word!
                   Make sure it's unique; if someone else chooses the same clue, it will not be shown
                   to {guesser.name}.
-                </h5>
+                </p>
               </Col>
             </Row>
           </>
       }
-      <Row className='my-5'>
-        <Col className='text-center'>
-          <h3><u>Guesser</u></h3>
-          <p>{guesser.name}</p>
-          <h3 className='mt-5'><u>Clue Givers</u></h3>
-          {
-            clueGivers.map(clueGiver =>
-              <div>
-                {clues[clueGiver.id] && '✅ '}
-                {clueGiver.name}
-              </div>
-            )
-          }
-        </Col>
-      </Row>
     </>
   );
 }

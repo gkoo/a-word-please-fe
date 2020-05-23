@@ -38,8 +38,81 @@
 
 /* GAME */
 
+.main-panel {
+  background-color: #2a2a2a;
+  border: 5px dashed #fff;
+}
+
+.player-label {
+  border-radius: 5px;
+  padding: 2px;
+  margin: 5px 0;
+}
+
+.player-label.blue {
+  background-color: #375a7f;
+}
+.player-label.indigo {
+  background-color: #6610f2;
+}
+.player-label.purple {
+  background-color: #6f42c1;
+}
+.player-label.pink {
+  background-color: #e83e8c;
+}
+.player-label.red {
+  background-color: #E74C3C;
+}
+.player-label.orange {
+  background-color: #fd7e14;
+}
+.player-label.yellow {
+  background-color: #F39C12;
+}
+.player-label.green {
+  background-color: #00bc8c;
+}
+.player-label.teal {
+  background-color: #20c997;
+}
+.player-label.cyan {
+  background-color: #3498DB;
+}
+.player-label.gray {
+  background-color: #888;
+}
+.player-label.gray-dark {
+  background-color: #303030;
+}
+.player-label.primary {
+  background-color: #375a7f;
+}
+.player-label.secondary {
+  background-color: #444;
+}
+.player-label.success {
+  background-color: #00bc8c;
+}
+.player-label.info {
+  background-color: #3498DB;
+}
+.player-label.warning {
+  background-color: #F39C12;
+}
+.player-label.danger {
+  background-color: #E74C3C;
+}
+.player-label.dark {
+  background-color: #303030;
+}
+
+.main-panel:first-child {
+  border-bottom-width: 0;
+}
+
 .board {
-  font-size: 26px;
+  font-size: 14px;
 }
 
 .lobby-container {
@@ -57,4 +130,27 @@
 
 .clue {
   font-size: 28px;
+}
+
+.help-text {
+  font-size: 16px;
+}
+
+@media (min-width: 576px) {
+  .board {
+    font-size: 16px;
+  }
+
+  .main-panel:first-child {
+    border-right-width: 0;
+    border-bottom-width: 5px;
+  }
+
+  .word-to-guess {
+    font-size: 3.5rem;
+  }
+
+  h3 {
+    font-size: 1.5rem;
+  }
 }

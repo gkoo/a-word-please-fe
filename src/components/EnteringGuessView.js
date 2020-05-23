@@ -35,8 +35,8 @@ function EnteringCluesView({
 
   return (
     <>
-      <Row className='my-5'>
-        <Col className='text-center'>
+      <Row>
+        <Col className='text-center mb-5'>
           <h4>Here are some clues:</h4>
           {
             Object.keys(clues).map(clueGiverId => {
@@ -44,7 +44,7 @@ function EnteringCluesView({
               const clueGiver = players[clueGiverId];
               return (
                 <div>
-                  {clueGiver.name}:{' '}
+                  <span className={`inline-player-label ${clueGiver.color}`}>{clueGiver.name}</span>:{' '}
                   <span className={cx({ duplicate: clueData.isDuplicate })}>
                     {clueData.isDuplicate ? '[redacted]' : clueData.clue}
                   </span>
@@ -77,7 +77,7 @@ function EnteringCluesView({
         !currPlayerIsGuesser &&
           <Row className='text-center'>
             <Col>
-              <h1>{guesser.name} is entering a guess!</h1>
+              <h3>{guesser.name} is entering a guess!</h3>
             </Col>
           </Row>
       }

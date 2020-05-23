@@ -15,7 +15,7 @@ import {
 } from '../constants';
 
 // Change to true to develop UI
-const useTestState = 1;
+const useTestState = 0;
 
 const initialState = {
   alertMessage: undefined,
@@ -40,14 +40,50 @@ const testState = {
     },
   },
   currWord: 'water',
-  currUserId: 'yuriko',
+  currUserId: 'gordon',
   currGuess: 'hydrant',
   debugEnabled: env !== 'production',
   gameState: STATE_ENTERING_GUESS,
-  guesserId: 'yuriko',
+  guesserId: 'willy',
   name: 'Gordon',
-  numPoints: 1,
+  numPoints: 7,
   players: {
+    gordon: {
+      id: 'gordon',
+      name: 'Gordon',
+      isLeader: true,
+      color: 'blue',
+    },
+    steve: {
+      id: 'steve',
+      name: 'Steve',
+      color: 'indigo',
+    },
+    yuriko: {
+      id: 'yuriko',
+      name: 'Yuriko',
+      color: 'purple',
+    },
+    aj: {
+      id: 'aj',
+      name: 'AJ',
+      color: 'pink',
+    },
+    willy: {
+      id: 'willy',
+      name: 'Willy',
+      color: 'red',
+    },
+    rishi: {
+      id: 'rishi',
+      name: 'Rishi',
+      color: 'orange',
+    },
+  },
+  roundNum: 0,
+  socket: io(socketIoServerUrl),
+  totalNumRounds: 13,
+  users: {
     gordon: {
       id: 'gordon',
       name: 'Gordon',
@@ -62,13 +98,38 @@ const testState = {
       name: 'Yuriko',
     },
   },
-  roundNum: 0,
-  socket: io(socketIoServerUrl),
-  totalNumRounds: 13,
-  users: {},
 };
 
 const stateToUse = useTestState ? testState : initialState;
+
+const colors = [
+  'blue',
+  'indigo',
+  'purple',
+  'pink',
+  'red',
+  'orange',
+  'yellow',
+  'green',
+  'teal',
+  'cyan',
+  'gray',
+  'gray-dark',
+  'primary',
+  'secondary',
+  'success',
+  'info',
+  'warning',
+  'danger',
+  'dark',
+];
+
+const getColorForPlayerName = name => {
+  const letters = name.split('');
+  const charCodes = letters.map(letter => letter.charCodeAt(0));
+  const sum = charCodes.reduce((currSum, currCode) => currSum + currCode);
+  return colors[sum % colors.length];
+};
 
 export default function reducer(state = stateToUse, action) {
   let name, newMessages, newPlayers, newUsers, players;
@@ -219,9 +280,11 @@ export default function reducer(state = stateToUse, action) {
 
       newPlayers = {};
       Object.keys(players).forEach(playerId => {
+        const color = getColorForPlayerName(players[playerId].name);
         newPlayers[playerId] = {
           ...state.players[playerId],
           ...players[playerId],
+          color,
         }
       });
 

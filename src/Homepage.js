@@ -32,7 +32,11 @@ function Homepage() {
     generatedRoomCode += generatedChar;
   }
 
-  const onRoomCodeChange = (e) => setRoomCode(e.target.value);
+  const onRoomCodeChange = (e) => {
+    const code = e.target.value.toLowerCase();
+    const lettersOnlyCode = code.replace(/[^a-z]/g, '');
+    setRoomCode(lettersOnlyCode);
+  };
 
   const joinRoom = () => history.push(`/rooms/${roomCode}`);
 

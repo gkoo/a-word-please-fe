@@ -9,7 +9,7 @@ import Row from 'react-bootstrap/Row';
 
 import LeaderPanel from './LeaderPanel';
 import MessageLog from './MessageLog';
-import PlayerList from './PlayerList';
+import UserList from './UserList';
 import { toggleRulesModal } from '../store/actions';
 
 function Lobby({ messages, roomCode, users, socket }) {
@@ -39,7 +39,7 @@ function Lobby({ messages, roomCode, users, socket }) {
         </Row>
         <Row>
           <Col xs={6} lg={{ offset: 3, span: 3 }}>
-            <PlayerList users={users} />
+            <UserList users={users} />
           </Col>
           <Col xs={6} lg={{ span: 3 }}>
             <MessageLog
