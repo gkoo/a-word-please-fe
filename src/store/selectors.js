@@ -44,3 +44,4 @@ export const numRoundsLeftSelector = createSelector(
   totalNumRoundsSelector,
   (roundNum, totalNumRounds) => totalNumRounds - roundNum,
 );
+export const socketConnectedSelector = state => state.socketConnected;

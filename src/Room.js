@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
@@ -23,11 +23,12 @@ function Room() {
   const alertMessage = useSelector(selectors.alertMessageSelector);
   const gameState = useSelector(selectors.gameStateSelector);
   const messages = useSelector(selectors.messagesSelector);
-  const roomCode = useSelector(selectors.roomCodeSelector);
   const name = useSelector(selectors.nameSelector);
   const showRulesModal = useSelector(selectors.showRulesModalSelector);
   const socket = useSelector(selectors.socketSelector);
+  const socketConnected = useSelector(selectors.socketConnectedSelector);
   const users = useSelector(selectors.usersSelector);
+  const history = useHistory();
 
   const roomCodeParam = useParams().roomCode;
 
@@ -37,15 +38,23 @@ function Room() {
 
   const ROOM_CODE_PREFIX = 'room-';
 
-  // Join room using room code
   useEffect(() => {
-    // Just store the room code so that we don't try to join the room multiple times
-    if (!roomCode) {
-      const socketIoRoomName = `${ROOM_CODE_PREFIX}${roomCodeParam}`;
-      socket.emit('joinRoom', socketIoRoomName);
-      dispatch(actions.joinRoom(socketIoRoomName));
+    // We open the socket every time we join a room and close the socket when we leave (go back to
+    // homepage). This is so that when we leave, we don't continue to receive messages and the
+    // server doesn't mistake us for still being part of any game.
+    if (!socket) {
+      dispatch(actions.newSocket());
+      return;
     }
-  }, [socket, dispatch, roomCode, roomCodeParam]);
+
+    if (!socketConnected) {
+      dispatch(actions.connectSocket());
+      return;
+    }
+
+    const socketIoRoomName = `${ROOM_CODE_PREFIX}${roomCodeParam}`;
+    socket.emit('joinRoom', socketIoRoomName);
+  }, [socket, dispatch, socketConnected, roomCodeParam]);
 
   // Include second arg to prevent this from running multiple times
   useEffect(() => {
@@ -56,15 +65,16 @@ function Room() {
     socket.on('initData', data => dispatch(actions.receiveInitData(data)));
     socket.on('gameData', gameData => dispatch(actions.receiveGameData(gameData)));
     socket.on('newUser', user => dispatch(actions.newUser(user)));
-    socket.on('newLeader', userId => dispatch(actions.newLeader(userId)));
     socket.on('userDisconnect', userId => dispatch(actions.userDisconnect(userId)));
   }, [socket, dispatch]);
+
+  const navigateHome = (e) => { e.preventDefault(); history.push(`/`) };
 
   return (
     <Container>
       <NavBar variant='dark'>
         <Nav className="mr-auto">
-          <NavBar.Brand href="#">A Word, Please?</NavBar.Brand>
+          <NavBar.Brand onClick={navigateHome} href='/'>A Word, Please?</NavBar.Brand>
           <Nav.Link href="#" onClick={onShowRulesModal}>How to Play</Nav.Link>
         </Nav>
       </NavBar>

@@ -21,10 +21,12 @@ const initialState = {
   debugEnabled: env !== 'production',
   gameState: STATE_PENDING,
   players: {},
+  socketConnected: false,
   users: {},
   messages: [],
-  socket: io(socketIoServerUrl),
+  socket: null,
 };
+
 const testState = {
   alertMessage: undefined,
   //clues: {},
@@ -85,7 +87,7 @@ const testState = {
     },
   },
   roundNum: 0,
-  socket: io(socketIoServerUrl),
+  socket: null,
   totalNumRounds: 13,
   users: {
     gordon: {
@@ -153,6 +155,20 @@ export default function reducer(state = stateToUse, action) {
         winnerIds: undefined,
       };
 
+    case actions.CONNECT_SOCKET:
+      state.socket.open();
+      return {
+        ...state,
+        socketConnected: true,
+      }
+
+    case actions.DISCONNECT_SOCKET:
+      state.socket.close();
+      return {
+        ...state,
+        socketConnected: false,
+      }
+
     case actions.DISMISS_ALERT_MESSAGE:
       return {
         ...state,
@@ -184,12 +200,6 @@ export default function reducer(state = stateToUse, action) {
         alertMessage,
       };
 
-    case actions.JOIN_ROOM:
-      return {
-        ...state,
-        roomCode: action.payload,
-      };
-
     case actions.LAST_CARD_PLAYED:
       return {
         ...state,
@@ -210,6 +220,13 @@ export default function reducer(state = stateToUse, action) {
       return {
         ...state,
         users: newUsers,
+      };
+
+    case actions.NEW_SOCKET:
+      const socket = io(socketIoServerUrl)
+      return {
+        ...state,
+        socket,
       };
 
     case actions.NEW_USER:

@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
-import { Link, useHistory } from "react-router-dom";
+import React, { useEffect, useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { Link, useHistory } from 'react-router-dom';
 
 import Button from 'react-bootstrap/Button';
 import ButtonGroup from 'react-bootstrap/ButtonGroup'
@@ -12,9 +13,15 @@ import InputGroup from 'react-bootstrap/InputGroup'
 import Jumbotron from 'react-bootstrap/Jumbotron';
 import Row from 'react-bootstrap/Row';
 
+import { disconnectSocket } from './store/actions';
+import { socketConnectedSelector } from './store/selectors';
+
 import './bootstrap.min.css';
 
 function Homepage() {
+  const socketConnected = useSelector(socketConnectedSelector);
+  const dispatch = useDispatch();
+
   const nameLength = 4;
   const history = useHistory();
   const [roomCode, setRoomCode] = useState('');
@@ -39,6 +46,12 @@ function Homepage() {
   };
 
   const joinRoom = () => history.push(`/rooms/${roomCode}`);
+
+  useEffect(() => {
+    if (socketConnected) {
+      dispatch(disconnectSocket());
+    }
+  }, [socketConnected, dispatch]);
 
   return (
     <Container>

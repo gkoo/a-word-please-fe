@@ -2,13 +2,15 @@
 export const BARON_REVEAL = 'BARON_REVEAL';
 export const CARD_REVEAL = 'CARD_REVEAL';
 export const CLOSE_END_GAME_MODAL = 'CLOSE_END_GAME_MODAL';
+export const CONNECT_SOCKET = 'CONNECT_SOCKET';
+export const DISCONNECT_SOCKET = 'DISCONNECT_SOCKET';
 export const DISMISS_ALERT_MESSAGE = 'DISMISS_ALERT_MESSAGE';
 export const DISMISS_REVEAL = 'DISMISS_REVEAL';
 export const END_GAME = 'END_GAME';
-export const JOIN_ROOM = 'JOIN_ROOM';
 export const LAST_CARD_PLAYED = 'LAST_CARD_PLAYED';
 export const NEW_MESSAGE = 'NEW_MESSAGE';
 export const NEW_LEADER = 'NEW_LEADER';
+export const NEW_SOCKET = 'NEW_SOCKET';
 export const NEW_USER = 'NEW_USER';
 export const TOGGLE_DRAW_NEW_CARD = 'TOGGLE_DRAW_NEW_CARD';
 export const RECEIVE_DEBUG_INFO = 'RECEIVE_DEBUG_INFO';
@@ -20,29 +22,21 @@ export const SWITCH_CARD_DATA = 'SWITCH_CARD_DATA';
 export const TOGGLE_RULES_MODAL = 'TOGGLE_RULES_MODAL';
 export const USER_DISCONNECT = 'USER_DISCONNECT';
 
-// Actions
-export function baronReveal(baronData) {
+export function connectSocket() {
   return {
-    payload: baronData,
-    type: BARON_REVEAL,
+    type: CONNECT_SOCKET,
   }
 }
 
-export function closeEndGameModal() {
+export function disconnectSocket() {
   return {
-    type: CLOSE_END_GAME_MODAL,
+    type: DISCONNECT_SOCKET,
   }
 }
 
 export function dismissAlertMessage() {
   return {
     type: DISMISS_ALERT_MESSAGE,
-  }
-}
-
-export function dismissReveal() {
-  return {
-    type: DISMISS_REVEAL,
   }
 }
 
@@ -53,24 +47,10 @@ export function endGame(winnerIds) {
   }
 }
 
-export function joinRoom(roomCode) {
-  return {
-    payload: roomCode,
-    type: JOIN_ROOM,
-  }
-}
-
 export function receiveGameData(gameData) {
   return {
     payload: gameData,
     type: RECEIVE_GAME_DATA,
-  }
-}
-
-export function newLeader(userId) {
-  return {
-    payload: { userId },
-    type: NEW_LEADER,
   }
 }
 
@@ -81,17 +61,17 @@ export function newMessage(message) {
   }
 }
 
+export function newSocket(socket) {
+  return {
+    payload: { socket },
+    type: NEW_SOCKET,
+  }
+}
+
 export function newUser({ id, name, isLeader }) {
   return {
     payload: { id, name, isLeader },
     type: NEW_USER,
-  }
-}
-
-export function toggleDrawNewCard({ show }) {
-  return {
-    payload: { show },
-    type: TOGGLE_DRAW_NEW_CARD,
   }
 }
 
@@ -123,31 +103,10 @@ export function userDisconnect(userId) {
   }
 }
 
-export function lastCardPlayed(data) {
-  return {
-    payload: data,
-    type: LAST_CARD_PLAYED,
-  }
-}
-
-export function cardReveal(data) {
-  return {
-    payload: data,
-    type: CARD_REVEAL,
-  }
-}
-
 export function showAlert(msg) {
   return {
     payload: msg,
     type: SHOW_ALERT,
-  }
-}
-
-export function switchCardData(data) {
-  return {
-    payload: data,
-    type: SWITCH_CARD_DATA,
   }
 }
 
