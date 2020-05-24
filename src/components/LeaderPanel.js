@@ -36,7 +36,7 @@ function LeaderPanel({ numUsers }) {
 
   const newGame = e => {
     e.preventDefault();
-    socket.emit('newGame');
+    socket.emit('startGame');
   };
 
   const nextTurn = e => {
@@ -57,17 +57,15 @@ function LeaderPanel({ numUsers }) {
     socket.emit('debug');
   };
 
-  const wrongNumPlayers = numUsers < 2 || numUsers > 4;
+  const wrongNumPlayers = numUsers < 2;
 
   const renderStartGameButton = () => {
-    if (gameState === STATE_PENDING) {
-      if (wrongNumPlayers) {
-        return <Button onClick={startGame} disabled>Start game</Button>;
-      }
-      return <Button onClick={startGame}>Start game</Button>;
+    const buttonLabel = gameState === STATE_PENDING ? 'Start game' : 'New game';
+
+    if (wrongNumPlayers) {
+      return <Button onClick={startGame} disabled>{buttonLabel}</Button>;
     }
-    // TODO: make this take you back to the lobby
-    return <Button onClick={newGame}>New game</Button>;
+    return <Button onClick={startGame}>{buttonLabel}</Button>;
   };
 
   return (

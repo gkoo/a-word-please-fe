@@ -42,7 +42,7 @@ export const totalNumRoundsSelector = state => state.totalNumRounds;
 export const numRoundsLeftSelector = createSelector(
   roundNumSelector,
   totalNumRoundsSelector,
-  (roundNum, totalNumRounds) => totalNumRounds - roundNum,
+  (roundNum, totalNumRounds) => Math.max(totalNumRounds - roundNum, 0),
 );
 export const socketConnectedSelector = state => state.socketConnected;
 export const skippedTurnSelector = state => state.skippedTurn;
