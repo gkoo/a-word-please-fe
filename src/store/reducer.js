@@ -1,10 +1,7 @@
-import io from 'socket.io-client';
-
 import { env } from '../constants';
 import * as actions from './actions';
 
 import {
-  socketIoServerUrl,
   STATE_PENDING,
   STATE_ENTERING_CLUES,
   STATE_REVIEWING_CLUES,
@@ -12,6 +9,7 @@ import {
   STATE_TURN_END,
   STATE_GAME_END,
 } from '../constants';
+import { newSocket } from '../socket';
 
 // Change to true to develop UI
 const useTestState = 0;
@@ -223,7 +221,7 @@ export default function reducer(state = stateToUse, action) {
       };
 
     case actions.NEW_SOCKET:
-      const socket = io(socketIoServerUrl)
+      const socket = newSocket();
       return {
         ...state,
         socket,
@@ -286,6 +284,7 @@ export default function reducer(state = stateToUse, action) {
         numPoints,
         playerOrder,
         roundNum,
+        skippedTurn,
         totalNumRounds,
       } = action.payload;
 
@@ -313,6 +312,7 @@ export default function reducer(state = stateToUse, action) {
         players: newPlayers,
         playerOrder,
         roundNum,
+        skippedTurn,
         totalNumRounds,
       };
 

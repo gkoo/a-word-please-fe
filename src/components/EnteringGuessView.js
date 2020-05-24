@@ -35,32 +35,55 @@ function EnteringCluesView({
     setGuess('');
   };
 
+  const onSkipTurn = e => {
+    e.preventDefault();
+    if (!currPlayerIsGuesser) { return; }
+    socket.emit('skipTurn');
+  };
+
   return (
-    <>
+    <div className='text-center'>
       <Row>
-        <Col className='text-center mb-5'>
+        <Col className='mb-5'>
           <h1>Here are some clues:</h1>
           <CluesView redactDuplicates={true} />
         </Col>
       </Row>
       {
         currPlayerIsGuesser &&
-          <Row>
-            <Col sm={8} md={{ span: 6, offset: 3 }} className='text-center'>
-              <Form onSubmit={onSubmit}>
-                <h1 className='mb-4'>Enter a guess</h1>
-                <InputGroup>
-                  <Form.Control
-                    onChange={onEnterGuess}
-                    placeholder="Guess the word"
-                    type="text"
-                    value={guess}
-                  />
-                  <Button type='submit'>Submit</Button>
-                </InputGroup>
-              </Form>
-            </Col>
-          </Row>
+          <>
+            <Row className='my-3'>
+              <Col
+                sm={{ span: 10, offset: 1 }}
+                md={{ span: 8, offset: 2 }}
+                lg={{ span: 6, offset: 3 }}
+              >
+                <Form onSubmit={onSubmit}>
+                  <h1 className='mb-4'>Enter a guess</h1>
+                  <InputGroup>
+                    <Form.Control
+                      onChange={onEnterGuess}
+                      placeholder="Guess the word"
+                      type="text"
+                      value={guess}
+                    />
+                    <Button type='submit'>Submit</Button>
+                  </InputGroup>
+                </Form>
+              </Col>
+            </Row>
+            <Row className='mt-5'>
+              <Col sm={{ span: 10, offset: 1}} md={{ span: 8, offset: 2 }} lg={{ span: 6, offset: 3 }}>
+                <Button variant='outline-info' onClick={onSkipTurn}>
+                  Skip Turn
+                </Button>
+                <p className='mt-2'>
+                  If you skip, you won't get to win a point this round. But if you aren't sure about
+                  your guess and you get it wrong, you will lose one more turn in addition to this turn.
+                </p>
+              </Col>
+            </Row>
+          </>
       }
       {
         !currPlayerIsGuesser &&
@@ -70,7 +93,7 @@ function EnteringCluesView({
             </Col>
           </Row>
       }
-    </>
+    </div>
   );
 }
 

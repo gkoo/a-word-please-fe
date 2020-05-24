@@ -25,7 +25,7 @@ function NameModal({ show }) {
   return (
     <Modal show={show}>
       <Modal.Header>
-        <Modal.Title>Welcome to A Word, Please?!</Modal.Title>
+        <Modal.Title>Welcome to A Word, Please?</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <form onSubmit={handleSave}>

@@ -12,6 +12,7 @@ function TurnEndView() {
   const currWord = useSelector(selectors.currWordSelector);
   const currGuess = useSelector(selectors.currGuessSelector);
   const guesser = useSelector(selectors.guesserSelector);
+  const skippedTurn = useSelector(selectors.skippedTurnSelector);
 
   const isCorrectGuess = !!currGuess && currGuess.toLowerCase() === currWord.toLowerCase();
 
@@ -30,10 +31,25 @@ function TurnEndView() {
       </Row>
       <Row className='mb-5'>
         <Col>
-          <p>{guesser && guesser.name} guessed</p>
-          <h1 className={classes}>
-            {currGuess}
-          </h1>
+          {
+            skippedTurn &&
+              <>
+                <p>{guesser && guesser.name} skipped the turn.</p>
+              </>
+          }
+          {
+            !skippedTurn &&
+              <>
+                <p>{guesser && guesser.name} guessed</p>
+                <h1 className={classes}>
+                  {currGuess}
+                </h1>
+                {
+                  !isCorrectGuess &&
+                    <p>A turn has been taken away.</p>
+                }
+              </>
+          }
         </Col>
       </Row>
       <CluesView largeView={true} />
