@@ -34,11 +34,6 @@ function LeaderPanel({ numUsers }) {
     socket.emit('startGame');
   };
 
-  const newGame = e => {
-    e.preventDefault();
-    socket.emit('startGame');
-  };
-
   const nextTurn = e => {
     e.preventDefault();
     socket.emit('nextTurn');

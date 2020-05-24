@@ -63,7 +63,6 @@ function Board() {
                 currPlayerIsGuesser={currPlayerIsGuesser}
                 currWord={currWord}
                 guesser={guesser}
-                players={players}
               />
           }
           {

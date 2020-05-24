@@ -18,7 +18,6 @@ function EnteringCluesView({
   currPlayerIsGuesser,
   currWord,
   guesser,
-  players,
 }) {
   const [guess, setGuess] = useState('');
   const socket = useSelector(selectors.socketSelector);
