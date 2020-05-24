@@ -22,7 +22,7 @@ function DuplicatesModal({ show }) {
   };
 
   return (
-    <Modal show={show && !currPlayerIsGuesser} className='mt-5' animation={false}>
+    <Modal show={show && !currPlayerIsGuesser} className='mt-5 duplicates-modal' animation={false}>
       <Modal.Body className='text-center'>
         <h3>Your clues</h3>
         <div>

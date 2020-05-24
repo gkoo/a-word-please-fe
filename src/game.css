@@ -125,6 +125,14 @@
   font-size: 16px;
 }
 
+.modal {
+  z-index: 1080;
+}
+
+.modal.duplicates-modal {
+  z-index: 1050;
+}
+
 @media (min-width: 576px) {
   .board {
     font-size: 16px;

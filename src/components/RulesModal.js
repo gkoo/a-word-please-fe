@@ -5,7 +5,7 @@ import Modal from 'react-bootstrap/Modal';
 
 function RulesModal({ onClose, show }) {
   return (
-    <Modal show={show}>
+    <Modal show={show} className='rules-modal'>
       <Modal.Header>
         <Modal.Title>How to play</Modal.Title>
       </Modal.Header>
