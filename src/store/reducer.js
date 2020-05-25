@@ -200,8 +200,23 @@ export default function reducer(state = stateToUse, action) {
       name = action.payload.name;
       const oldUser = state.users[userId] || {};
 
+      const newAlerts = [...state.alerts];
+      const shouldShowAlert = userId !== state.currUserId;
+
+      if (shouldShowAlert) {
+        newAlerts.push({
+          id: state.nextAlertId,
+          message: `${name} has connected`,
+          type: 'info',
+        });
+      }
+
       return {
         ...state,
+        // Add an alert to notify that a new user has connected
+        alerts: newAlerts,
+        // Increment the id for the next alert
+        nextAlertId: shouldShowAlert ? state.nextAlertId + 1 : state.nextAlertId,
         users: {
           ...state.users,
           [userId]: {
@@ -215,6 +230,7 @@ export default function reducer(state = stateToUse, action) {
     // When another user has disconnected
     case actions.USER_DISCONNECT:
       const disconnectedUserId = action.payload.userId;
+      const playerName = state.users[disconnectedUserId].name;
       newUsers = {};
 
       Object.keys(state.users).forEach(userId => {
@@ -230,7 +246,7 @@ export default function reducer(state = stateToUse, action) {
           ...state.alerts,
           {
             id: state.nextAlertId,
-            message: `${state.players[action.payload.userId].name} has disconnected`,
+            message: `${playerName} has disconnected`,
             type: 'danger',
           }
         ],
