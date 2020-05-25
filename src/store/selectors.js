@@ -46,3 +46,4 @@ export const numRoundsLeftSelector = createSelector(
 );
 export const socketConnectedSelector = state => state.socketConnected;
 export const skippedTurnSelector = state => state.skippedTurn;
+export const alertsSelector = state => state.alerts;

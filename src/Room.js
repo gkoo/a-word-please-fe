@@ -6,7 +6,7 @@ import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import NavBar from 'react-bootstrap/Navbar';
 
-import AlertMessageModal from './components/AlertMessageModal';
+import AlertGroup from './components/AlertGroup';
 import Game from './components/Game';
 import Lobby from './components/Lobby';
 import NameModal from './components/NameModal';
@@ -20,7 +20,6 @@ import './game.css';
 
 function Room() {
   const dispatch = useDispatch();
-  const alertMessage = useSelector(selectors.alertMessageSelector);
   const gameState = useSelector(selectors.gameStateSelector);
   const messages = useSelector(selectors.messagesSelector);
   const name = useSelector(selectors.nameSelector);
@@ -32,7 +31,6 @@ function Room() {
 
   const roomCodeParam = useParams().roomCode;
 
-  const onDismissAlertMessage = () => dispatch(actions.dismissAlertMessage());
   const onHideRulesModal = () => dispatch(actions.toggleRulesModal({ show: false }));
   const onShowRulesModal = () => dispatch(actions.toggleRulesModal({ show: true }));
 
@@ -56,7 +54,6 @@ function Room() {
     socket.emit('joinRoom', socketIoRoomName);
   }, [socket, dispatch, socketConnected, roomCodeParam]);
 
-  // Include second arg to prevent this from running multiple times
   useEffect(() => {
     if (!socket) { return; }
 
@@ -78,6 +75,7 @@ function Room() {
           <Nav.Link href="#" onClick={onShowRulesModal}>How to Play</Nav.Link>
         </Nav>
       </NavBar>
+      <AlertGroup />
       {
         gameState === STATE_PENDING &&
           <Lobby
@@ -95,7 +93,6 @@ function Room() {
           />
       }
       <NameModal show={!name} />
-      <AlertMessageModal alertMessage={alertMessage} onClose={onDismissAlertMessage}/>
       <RulesModal show={showRulesModal} onClose={onHideRulesModal} />
     </Container>
   );

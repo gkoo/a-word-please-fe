@@ -1,24 +1,17 @@
 // Action Types
-export const BARON_REVEAL = 'BARON_REVEAL';
-export const CARD_REVEAL = 'CARD_REVEAL';
-export const CLOSE_END_GAME_MODAL = 'CLOSE_END_GAME_MODAL';
 export const CONNECT_SOCKET = 'CONNECT_SOCKET';
 export const DISCONNECT_SOCKET = 'DISCONNECT_SOCKET';
-export const DISMISS_ALERT_MESSAGE = 'DISMISS_ALERT_MESSAGE';
-export const DISMISS_REVEAL = 'DISMISS_REVEAL';
+export const DISMISS_ALERT = 'DISMISS_ALERT';
 export const END_GAME = 'END_GAME';
-export const LAST_CARD_PLAYED = 'LAST_CARD_PLAYED';
-export const NEW_MESSAGE = 'NEW_MESSAGE';
+export const NEW_ALERT = 'NEW_ALERT';
 export const NEW_LEADER = 'NEW_LEADER';
 export const NEW_SOCKET = 'NEW_SOCKET';
 export const NEW_USER = 'NEW_USER';
-export const TOGGLE_DRAW_NEW_CARD = 'TOGGLE_DRAW_NEW_CARD';
 export const RECEIVE_DEBUG_INFO = 'RECEIVE_DEBUG_INFO';
 export const RECEIVE_GAME_DATA = 'RECEIVE_GAME_DATA';
 export const RECEIVE_INIT_DATA = 'RECEIVE_INIT_DATA';
 export const SAVE_NAME = 'SAVE_NAME';
 export const SHOW_ALERT = 'SHOW_ALERT';
-export const SWITCH_CARD_DATA = 'SWITCH_CARD_DATA';
 export const TOGGLE_RULES_MODAL = 'TOGGLE_RULES_MODAL';
 export const USER_DISCONNECT = 'USER_DISCONNECT';
 
@@ -34,9 +27,10 @@ export function disconnectSocket() {
   }
 }
 
-export function dismissAlertMessage() {
+export function dismissAlert(id) {
   return {
-    type: DISMISS_ALERT_MESSAGE,
+    payload: { id },
+    type: DISMISS_ALERT,
   }
 }
 
@@ -54,10 +48,10 @@ export function receiveGameData(gameData) {
   }
 }
 
-export function newMessage(message) {
+export function newAlert({ message, type }) {
   return {
-    payload: { message },
-    type: NEW_MESSAGE,
+    payload: { message, type },
+    type: NEW_ALERT,
   }
 }
 

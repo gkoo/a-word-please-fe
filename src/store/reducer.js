@@ -15,9 +15,10 @@ import { newSocket } from '../socket';
 const useTestState = 0;
 
 const initialState = {
-  alertMessage: undefined,
+  alerts: [],
   debugEnabled: env !== 'production',
   gameState: STATE_PENDING,
+  nextAlertId: 0,
   players: {},
   socketConnected: false,
   users: {},
@@ -26,7 +27,18 @@ const initialState = {
 };
 
 const testState = {
-  alertMessage: undefined,
+  alerts: [
+    {
+      id: 0,
+      message: 'Gordon is dumb!',
+      type: 'danger',
+    },
+    {
+      id: 1,
+      message: 'No he\'s not!',
+      type: 'primary',
+    },
+  ],
   //clues: {},
   clues: {
     'steve': {
@@ -45,11 +57,12 @@ const testState = {
   //gameState: STATE_ENTERING_CLUES,
   //gameState: STATE_REVIEWING_CLUES,
   //gameState: STATE_ENTERING_GUESS,
-  //gameState: STATE_TURN_END,
-  gameState: STATE_GAME_END,
+  gameState: STATE_TURN_END,
+  //gameState: STATE_GAME_END,
+  //guesserId: 'gordon',
   guesserId: 'willy',
-  //guesserId: 'willy',
   name: 'Gordon',
+  nextAlertId: 5,
   numPoints: 7,
   players: {
     gordon: {
@@ -85,6 +98,7 @@ const testState = {
     },
   },
   roundNum: 0,
+  showRulesModal: false,
   socket: null,
   totalNumRounds: 13,
   users: {
@@ -129,30 +143,9 @@ const getColorForPlayerName = name => {
 };
 
 export default function reducer(state = stateToUse, action) {
-  let name, newMessages, newPlayers, newUsers, players;
+  let name, newPlayers, newUsers, players;
 
   switch(action.type) {
-    case actions.BARON_REVEAL:
-      const baronRevealData = action.payload;
-      return {
-        ...state,
-        baronRevealData,
-        showCardModal: true,
-      };
-
-    case actions.CARD_REVEAL:
-      return {
-        ...state,
-        cardReveal: action.payload,
-        showCardModal: true,
-      };
-
-    case actions.CLOSE_END_GAME_MODAL:
-      return {
-        ...state,
-        winnerIds: undefined,
-      };
-
     case actions.CONNECT_SOCKET:
       state.socket.open();
       return {
@@ -160,28 +153,24 @@ export default function reducer(state = stateToUse, action) {
         socketConnected: true,
       }
 
+    case actions.DISMISS_ALERT:
+      const { id } = action.payload;
+      const { alerts } = state;
+      const alertIdx = alerts.findIndex(alert => alert.id === id);
+      return {
+        ...state,
+        alerts: [
+          ...alerts.slice(0, alertIdx),
+          ...alerts.slice(alertIdx+1),
+        ],
+      };
+
     case actions.DISCONNECT_SOCKET:
       state.socket.close();
       return {
         ...state,
         socketConnected: false,
       }
-
-    case actions.DISMISS_ALERT_MESSAGE:
-      return {
-        ...state,
-        alertMessage: undefined,
-      };
-
-    case actions.DISMISS_REVEAL:
-      return {
-        ...state,
-        baronRevealData: null,
-        cardReveal: null,
-        showCardModal: false,
-        switchCardData: null,
-        showDrawNewCardModal: false,
-      };
 
     case actions.END_GAME:
       const winnerIds = action.payload;
@@ -198,28 +187,6 @@ export default function reducer(state = stateToUse, action) {
         alertMessage,
       };
 
-    case actions.LAST_CARD_PLAYED:
-      return {
-        ...state,
-        lastCardPlayed: action.payload,
-        showCardModal: true,
-      };
-
-    case actions.NEW_LEADER:
-      const { userId } = action.payload;
-      const user = {
-        ...state.users[userId],
-        isLeader: true,
-      };
-      newUsers = {
-        ...state.users,
-        [userId]: user,
-      };
-      return {
-        ...state,
-        users: newUsers,
-      };
-
     case actions.NEW_SOCKET:
       const socket = newSocket();
       return {
@@ -228,15 +195,16 @@ export default function reducer(state = stateToUse, action) {
       };
 
     case actions.NEW_USER:
-      const { id, isLeader } = action.payload;
+      const userId = action.payload.id;
+      const isLeader = action.payload.isLeader;
       name = action.payload.name;
-      const oldUser = state.users[id] || {};
+      const oldUser = state.users[userId] || {};
 
       return {
         ...state,
         users: {
           ...state.users,
-          [id]: {
+          [userId]: {
             ...oldUser,
             name,
             isLeader,
@@ -244,16 +212,31 @@ export default function reducer(state = stateToUse, action) {
         },
       };
 
+    // When another user has disconnected
     case actions.USER_DISCONNECT:
       const disconnectedUserId = action.payload.userId;
       newUsers = {};
+
       Object.keys(state.users).forEach(userId => {
         if (disconnectedUserId !== userId) {
           newUsers[userId] = state.users[userId];
         }
       });
+
       return {
         ...state,
+        // Add an alert to notify that the user has disconnected
+        alerts: [
+          ...state.alerts,
+          {
+            id: state.nextAlertId,
+            message: `${state.players[action.payload.userId].name} has disconnected`,
+            type: 'danger',
+          }
+        ],
+        // Increment the id for the next alert
+        nextAlertId: state.nextAlertId + 1,
+        // Mark the user as disconnected
         players: {
           ...state.players,
           [disconnectedUserId]: {
@@ -264,11 +247,19 @@ export default function reducer(state = stateToUse, action) {
         users: newUsers,
       }
 
-    case actions.NEW_MESSAGE:
-      newMessages = [...state.messages, action.payload.message];
+    case actions.NEW_ALERT:
+      const { message, type } = action.payload;
+      let { nextAlertId } = state;
+
+      const alert = {
+        id: nextAlertId,
+        message,
+        type,
+      };
       return {
         ...state,
-        messages: newMessages,
+        alerts: [...state.alerts, alert],
+        nextAlertId: nextAlertId + 1,
       };
 
     case actions.RECEIVE_DEBUG_INFO:
@@ -329,7 +320,7 @@ export default function reducer(state = stateToUse, action) {
       name = action.payload.name;
       return {
         ...state,
-        debugEnabled: name === 'Gordon' || state.debugEnabled, // >_<
+        debugEnabled: name.toLowerCase() === 'gordon' || state.debugEnabled, // >_<
         name: name,
       };
 
@@ -337,19 +328,6 @@ export default function reducer(state = stateToUse, action) {
       return {
         ...state,
         alertMessage: action.payload,
-      };
-
-    case actions.SWITCH_CARD_DATA:
-      return {
-        ...state,
-        showCardModal: true,
-        switchCardData: action.payload,
-      };
-
-    case actions.TOGGLE_DRAW_NEW_CARD:
-      return {
-        ...state,
-        showDrawNewCardModal: action.payload.show,
       };
 
     case actions.TOGGLE_RULES_MODAL:
