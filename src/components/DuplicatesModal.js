@@ -29,7 +29,7 @@ function DuplicatesModal({ show }) {
           <CluesView redactDuplicates={false} />
         </div>
       </Modal.Body>
-      <Button onClick={onRevealClues}>Show Clues To {guesser.name}</Button>
+      <Button onClick={onRevealClues}>Show Clues To {guesser && guesser.name}</Button>
     </Modal>
   );
 }

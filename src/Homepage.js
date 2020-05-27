@@ -13,7 +13,7 @@ import InputGroup from 'react-bootstrap/InputGroup'
 import Jumbotron from 'react-bootstrap/Jumbotron';
 import Row from 'react-bootstrap/Row';
 
-import { disconnectSocket } from './store/actions';
+import { disconnectSocket, receiveGameData, setRoomCode, saveName } from './store/actions';
 import { socketConnectedSelector } from './store/selectors';
 
 import './bootstrap.min.css';
@@ -22,13 +22,13 @@ function Homepage() {
   const socketConnected = useSelector(socketConnectedSelector);
   const dispatch = useDispatch();
 
-  const nameLength = 4;
+  const maxRoomCodeLength = 4;
   const history = useHistory();
-  const [roomCode, setRoomCode] = useState('');
+  const [newRoomCode, setNewRoomCode] = useState('');
   const vowels = ['a', 'e', 'i', 'o', 'u'];
 
   let generatedRoomCode = '';
-  for (let i = 0; i < nameLength; ++i) {
+  for (let i = 0; i < maxRoomCodeLength; ++i) {
     let generatedChar;
     while (true) {
       const alphabetLength = 26;
@@ -41,11 +41,16 @@ function Homepage() {
 
   const onRoomCodeChange = (e) => {
     const code = e.target.value.toLowerCase();
-    const lettersOnlyCode = code.replace(/[^a-z]/g, '');
-    setRoomCode(lettersOnlyCode);
+    const lettersOnlyCode = code.replace(/[^a-z]/g, '').substring(0, 4);
+    setNewRoomCode(lettersOnlyCode);
   };
 
-  const joinRoom = () => history.push(`/rooms/${roomCode}`);
+  const joinRoom = () => {
+    dispatch(receiveGameData({}));
+    dispatch(saveName(null));
+    dispatch(setRoomCode(newRoomCode));
+    history.push(`/rooms/${newRoomCode}`);
+  };
 
   useEffect(() => {
     if (socketConnected) {
@@ -87,7 +92,7 @@ function Homepage() {
                     <InputGroup>
                       <Form.Control
                         placeholder='Room code'
-                        value={roomCode}
+                        value={newRoomCode}
                         onChange={onRoomCodeChange}
                       />
                     </InputGroup>

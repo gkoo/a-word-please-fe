@@ -17,9 +17,10 @@ const useTestState = 0;
 const initialState = {
   alerts: [],
   debugEnabled: env !== 'production',
-  gameState: STATE_PENDING,
+  gameData: {
+    players: {},
+  },
   nextAlertId: 0,
-  players: {},
   socketConnected: false,
   users: {},
   messages: [],
@@ -172,22 +173,10 @@ export default function reducer(state = stateToUse, action) {
         socketConnected: false,
       }
 
-    case actions.END_GAME:
-      const winnerIds = action.payload;
-      let alertMessage;
-      if (winnerIds) {
-        const winnerNames = winnerIds && winnerIds.map(winnerId => state.players[winnerId].name);
-        alertMessage = `${winnerNames.join(' and ')} won the game!`;
-      } else {
-        alertMessage = 'The game has ended.';
-      }
-      return {
-        ...state,
-        gameState: STATE_GAME_END,
-        alertMessage,
-      };
-
     case actions.NEW_SOCKET:
+      if (state.socket) {
+        return state;
+      }
       const socket = newSocket();
       return {
         ...state,
@@ -230,7 +219,9 @@ export default function reducer(state = stateToUse, action) {
     // When another user has disconnected
     case actions.USER_DISCONNECT:
       const disconnectedUserId = action.payload.userId;
-      const playerName = state.users[disconnectedUserId].name;
+      const disconnectedUser = state.users[disconnectedUserId];
+      const playerName = disconnectedUser && disconnectedUser.name;
+
       newUsers = {};
 
       Object.keys(state.users).forEach(userId => {
@@ -254,9 +245,9 @@ export default function reducer(state = stateToUse, action) {
         nextAlertId: state.nextAlertId + 1,
         // Mark the user as disconnected
         players: {
-          ...state.players,
+          ...state.gameData.players,
           [disconnectedUserId]: {
-            ...state.players[disconnectedUserId],
+            ...state.gameData.players[disconnectedUserId],
             connected: false,
           },
         },
@@ -295,32 +286,36 @@ export default function reducer(state = stateToUse, action) {
         totalNumRounds,
       } = action.payload;
 
-      const gameState = action.payload.state;
       players = action.payload.players;
 
       newPlayers = {};
-      Object.keys(players).forEach(playerId => {
-        const color = getColorForPlayerName(players[playerId].name);
-        newPlayers[playerId] = {
-          ...state.players[playerId],
-          ...players[playerId],
-          color,
-        }
-      });
+
+      if (players) {
+        Object.keys(players).forEach(playerId => {
+          const color = getColorForPlayerName(players[playerId].name);
+          newPlayers[playerId] = {
+            ...state.gameData.players[playerId],
+            ...players[playerId],
+            color,
+          }
+        });
+      }
 
       return {
         ...state,
-        clues,
-        currGuess,
-        currWord,
-        guesserId,
-        gameState,
-        numPoints,
-        players: newPlayers,
-        playerOrder,
-        roundNum,
-        skippedTurn,
-        totalNumRounds,
+        gameData: {
+          clues,
+          currGuess,
+          currWord,
+          guesserId,
+          numPoints,
+          players: newPlayers,
+          playerOrder,
+          roundNum,
+          skippedTurn,
+          state: action.payload.state,
+          totalNumRounds,
+        },
       };
 
     case actions.RECEIVE_INIT_DATA:
@@ -336,8 +331,17 @@ export default function reducer(state = stateToUse, action) {
       name = action.payload.name;
       return {
         ...state,
-        debugEnabled: name.toLowerCase() === 'gordon' || state.debugEnabled, // >_<
+        debugEnabled: (name && name.toLowerCase() === 'gordon') || state.debugEnabled, // >_<
         name: name,
+      };
+
+    case actions.SET_ROOM_CODE:
+      const { roomCode } = action.payload;
+      const isHomepage = !roomCode;
+
+      return {
+        ...state,
+        roomCode,
       };
 
     case actions.SHOW_ALERT:

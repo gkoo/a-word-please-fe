@@ -11,6 +11,7 @@ export const RECEIVE_DEBUG_INFO = 'RECEIVE_DEBUG_INFO';
 export const RECEIVE_GAME_DATA = 'RECEIVE_GAME_DATA';
 export const RECEIVE_INIT_DATA = 'RECEIVE_INIT_DATA';
 export const SAVE_NAME = 'SAVE_NAME';
+export const SET_ROOM_CODE = 'SET_ROOM_CODE';
 export const SHOW_ALERT = 'SHOW_ALERT';
 export const TOGGLE_RULES_MODAL = 'TOGGLE_RULES_MODAL';
 export const USER_DISCONNECT = 'USER_DISCONNECT';
@@ -38,13 +39,6 @@ export function endGame(winnerIds) {
   return {
     payload: winnerIds,
     type: END_GAME,
-  }
-}
-
-export function receiveGameData(gameData) {
-  return {
-    payload: gameData,
-    type: RECEIVE_GAME_DATA,
   }
 }
 
@@ -76,6 +70,13 @@ export function receiveDebugInfo(data) {
   }
 }
 
+export function receiveGameData(gameData) {
+  return {
+    payload: gameData,
+    type: RECEIVE_GAME_DATA,
+  }
+}
+
 export function receiveInitData({ currUserId, messages, users }) {
   return {
     payload: { currUserId, messages, users },
@@ -94,6 +95,13 @@ export function userDisconnect(userId) {
   return {
     payload: { userId },
     type: USER_DISCONNECT,
+  }
+}
+
+export function setRoomCode(roomCode) {
+  return {
+    payload: { roomCode },
+    type: SET_ROOM_CODE,
   }
 }
 

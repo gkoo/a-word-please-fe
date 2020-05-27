@@ -18,6 +18,34 @@ import * as selectors from './store/selectors';
 import './bootstrap.min.css';
 import './game.css';
 
+const renderContent = ({
+  gameState,
+  messages,
+  roomCodeParam,
+  socket,
+  users,
+}) => {
+  if (gameState === null || gameState === undefined) {
+    return <div />;
+  }
+  if (gameState === STATE_PENDING) {
+    return (
+      <Lobby
+        messages={messages}
+        roomCode={roomCodeParam}
+        socket={socket}
+        users={users}
+      />
+    );
+  }
+  return (
+    <Game
+      socket={socket}
+      messages={messages}
+    />
+  );
+};
+
 function Room() {
   const dispatch = useDispatch();
   const gameState = useSelector(selectors.gameStateSelector);
@@ -63,6 +91,14 @@ function Room() {
     socket.on('gameData', gameData => dispatch(actions.receiveGameData(gameData)));
     socket.on('newUser', user => dispatch(actions.newUser(user)));
     socket.on('userDisconnect', userId => dispatch(actions.userDisconnect(userId)));
+    return () => {
+      socket.removeAllListeners('debugInfo');
+      socket.removeAllListeners('endGame');
+      socket.removeAllListeners('initData');
+      socket.removeAllListeners('gameData');
+      socket.removeAllListeners('newUser');
+      socket.removeAllListeners('userDisconnect');
+    };
   }, [socket, dispatch]);
 
   const navigateHome = (e) => { e.preventDefault(); history.push(`/`) };
@@ -77,20 +113,7 @@ function Room() {
       </NavBar>
       <AlertGroup />
       {
-        gameState === STATE_PENDING &&
-          <Lobby
-            messages={messages}
-            roomCode={roomCodeParam}
-            socket={socket}
-            users={users}
-          />
-      }
-      {
-        gameState !== STATE_PENDING &&
-          <Game
-            socket={socket}
-            messages={messages}
-          />
+        renderContent({ gameState, messages, roomCodeParam, socket, users })
       }
       <NameModal show={!name} />
       <RulesModal show={showRulesModal} onClose={onHideRulesModal} />
