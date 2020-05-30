@@ -46,7 +46,7 @@ function EnteringCluesView({
 
   const onEnterClue = e => {
     e.preventDefault();
-    setClue(e.target.value.substring(0, MAX_CLUE_LENGTH).replace(/[^\w]/g, ''));
+    setClue(e.target.value.substring(0, MAX_CLUE_LENGTH).replace(/\s/g, ''));
   };
 
   const onSubmit = e => {
