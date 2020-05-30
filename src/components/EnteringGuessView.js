@@ -12,7 +12,7 @@ import * as selectors from '../store/selectors';
 
 const MAX_GUESS_LENGTH = 20;
 
-function EnteringCluesView({
+function EnteringGuessView({
   clues,
   clueGivers,
   currPlayerIsGuesser,
@@ -96,4 +96,4 @@ function EnteringCluesView({
   );
 }
 
-export default EnteringCluesView;
+export default EnteringGuessView;
